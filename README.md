@@ -123,11 +123,11 @@ CocoaSkill is a dependency manager for AI agent skills and contexts. It provides
 
 CocoaSkill solves three problems:
 
-1. **Global context pollution.** Existing tools install skills globally or without project-scoped isolation. Skills and contexts irrelevant to a project pollute the agent's context window, waste tokens, and cause unintended behavioral interference.
+1. **Non-declarative skill management.** While several existing tools support project-local installation, the ecosystem lacks a unified declarative workflow: a single manifest listing all required skills with version constraints, a lockfile guaranteeing reproducible resolution, and a stripped installation that excludes non-skill content from the agent's context window. Skills are added imperatively, one at a time, with no audit trail of what a project depends on.
 
-2. **Non-reproducible environments.** Teams have no way to guarantee that every developer and CI runner operates with the same set of skills at the same versions. Manual installation leads to version drift and "works on my machine" failures.
+2. **Non-reproducible environments.** Few reliable mechanisms exist to guarantee that every developer and CI runner operates with the same set of skills at the same versions. Most tools lack lockfiles, frozen install modes, or content integrity verification. This leads to version drift, silent breakage from upstream skill changes, and "works on my machine" failures.
 
-3. **Absent supply chain security.** The agent skill ecosystem has no code signing, no source audit tooling, and confirmed malicious skill incidents (ClawHavoc, January 2026: 341 poisoned skills). Skills execute within the agent's trust boundary, making the attack surface equivalent to arbitrary code execution.
+3. **Fragmented supply chain security.** Source audit tools exist (vskill, asm) but operate independently from dependency management — scanning is a separate step, not integrated into the install workflow. Code signing and digital signature verification for skill executables and source files are completely absent from the ecosystem. No existing tool verifies the identity of a skill publisher or the integrity of skill artifacts through a cryptographic chain of trust. Confirmed malicious skill incidents (ClawHavoc, January 2026: 341 poisoned skills) demonstrate that skills execute within the agent's trust boundary, making the attack surface equivalent to arbitrary code execution.
 
 The name "CocoaSkill" alludes to CocoaPods, the first dependency manager for iOS development, which brought order to a similarly immature ecosystem.
 
