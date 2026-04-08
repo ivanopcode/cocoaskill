@@ -7,6 +7,14 @@
 
 ---
 
+## Abstract
+
+CocoaSkill is a dependency manager for AI agent skills — reusable instruction packages that give coding agents specialized capabilities. The skill ecosystem is young, growing rapidly, and lacks standard tooling for declarative dependency management, reproducible installation, or supply chain security.
+
+The architecture draws from classical dependency managers (Bundler, SPM, Gradle, Cargo) but addresses problems specific to an infrastructure that remains immature. Skills are a new embodiment of source code: even a plain markdown skill file with no executables can be a vector for prompt injection, and as skills grow in complexity they inevitably pull in binaries and other executables that demand security policies no less rigorous than industry best practice. Existing tools offer varying degrees of content scanning, yet few defend against supply chain attacks: publisher impersonation, artifact tampering, silent content mutation within a pinned version, and post-install substitution of verified artifacts. These are threats that content scanning alone cannot detect — they require public key cryptography. CocoaSkill closes this gap with an SSH certificate-based signing model, hierarchical CA trust, and pluggable identity verification — the first PKI purpose-built for agent skill artifacts.
+
+---
+
 ## Table of Contents
 
 1. [Overview](#1-overview)
@@ -123,11 +131,11 @@ CocoaSkill is a dependency manager for AI agent skills and contexts. It provides
 
 CocoaSkill solves three problems:
 
-1. **Non-declarative skill management.** While several existing tools support project-local installation, the ecosystem lacks a unified declarative workflow: a single manifest listing all required skills with version constraints, a lockfile guaranteeing reproducible resolution, and a stripped installation that excludes non-skill content from the agent's context window. Skills are added imperatively, one at a time, with no audit trail of what a project depends on.
+1. **Non-declarative skill management.** Most existing tools support project-local installation, but the dominant workflow remains imperative: skills are added one at a time, with limited or no manifest-driven resolution, lockfile-based reproducibility, or stripped installation that excludes non-skill content from the agent's context window. Isolated solutions exist for parts of this problem, but no single tool combines declarative manifests, deterministic locking, security verification, and multi-agent delivery into a unified workflow.
 
-2. **Non-reproducible environments.** Few reliable mechanisms exist to guarantee that every developer and CI runner operates with the same set of skills at the same versions. Most tools lack lockfiles, frozen install modes, or content integrity verification. This leads to version drift, silent breakage from upstream skill changes, and "works on my machine" failures.
+2. **Non-reproducible environments.** Few reliable mechanisms exist to guarantee that every developer on a team operates with the same set of skills at the same versions. Most tools lack lockfiles, frozen install modes, or content integrity verification. This leads to version drift, silent breakage from upstream skill changes, and "works on my machine" failures. The absence of integrity verification is also a security exposure: a modified artifact is indistinguishable from a legitimate one.
 
-3. **Fragmented supply chain security.** Source audit tools exist (vskill, asm) but operate independently from dependency management — scanning is a separate step, not integrated into the install workflow. Code signing and digital signature verification for skill executables and source files are completely absent from the ecosystem. No existing tool verifies the identity of a skill publisher or the integrity of skill artifacts through a cryptographic chain of trust. Confirmed malicious skill incidents (ClawHavoc, January 2026: 341 poisoned skills) demonstrate that skills execute within the agent's trust boundary, making the attack surface equivalent to arbitrary code execution.
+3. **Fragmented supply chain security.** Some tools provide content scanning and pattern-based vulnerability detection, but the security coverage across the ecosystem remains uneven and narrowly scoped. Content audit addresses one class of threats; it does not protect against supply chain attacks such as publisher impersonation, artifact tampering, or silent content mutation within a pinned version. Code signing and digital signature verification for skill executables and source files are completely absent from the ecosystem. No existing tool verifies the identity of a skill publisher or the integrity of skill artifacts through a cryptographic chain of trust. Confirmed malicious skill incidents (ClawHavoc, January 2026: 341 poisoned skills) demonstrate that skills execute within the agent's trust boundary, making the attack surface equivalent to arbitrary code execution.
 
 The name "CocoaSkill" alludes to CocoaPods, the first dependency manager for iOS development, which brought order to a similarly immature ecosystem.
 
