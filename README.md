@@ -2,7 +2,7 @@
 
 **Version:** 0.1.0-draft  
 **Date:** 2026-04-09  
-**Author:** Ivan Oparin  
+**Authors:** Ivan Oparin, Alexey Grigorev  
 **Status:** Draft
 
 ---
